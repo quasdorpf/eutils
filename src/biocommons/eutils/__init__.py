@@ -2,6 +2,7 @@
 from importlib.metadata import PackageNotFoundError, version
 
 from ._internal.client import Client
+from ._internal.largeclient import LargeClient
 from ._internal.exceptions import (
     EutilsError,
     EutilsNCBIError,
@@ -12,6 +13,7 @@ from ._internal.queryservice import QueryService
 
 __all__ = [
     "Client",
+    "LargeClient",
     "EutilsError",
     "EutilsNCBIError",
     "EutilsNotFoundError",
