@@ -14,7 +14,7 @@ from .xmlfacades.esearchresult import ESearchResult
 from .xmlfacades.gbset import GBSet
 from .xmlfacades.pubmedarticleset import PubmedArticleSet
 from .xmlfacades.pubmedcentralarticleset import PubmedCentralArticleSet
-from client import Client
+from .client import Client
 
 
 logger = logging.getLogger(__name__)
