@@ -13,16 +13,17 @@ class ExchangeSet(Base):
     _root_tag = "{https://www.ncbi.nlm.nih.gov/SNP/docsum}ExchangeSet"
 
     def __iter__(self):
+        # print(self._xml_root.find('DocumentSummary', namespaces={None: self._xml_root.nsmap.get(None)}).get('uid') )
         return (
             Rs(n)
             for n in self._xml_root.iterfind(
-                "docsum:Rs", namespaces={"docsum": self._xml_root.nsmap[None]}
+                "DocumentSummary", namespaces={None : self._xml_root.nsmap.get(None)}
             )
         )
 
     def __len__(self):
         return len(
-            self._xml_root.findall("docsum:Rs", namespaces={"docsum": self._xml_root.nsmap[None]})
+            self._xml_root.findall("DocumentSummary", namespaces={None : self._xml_root.nsmap.get(None)})
         )
 
 
@@ -30,7 +31,7 @@ class Rs(object):
     _root_tag = "Rs"
 
     def __init__(self, rs_node):
-        assert rs_node.tag == "{https://www.ncbi.nlm.nih.gov/SNP/docsum}Rs"
+        assert rs_node.tag == "{https://www.ncbi.nlm.nih.gov/SNP/docsum}DocumentSummary"
         self._n = rs_node
 
     # def __str__(self):
@@ -38,12 +39,13 @@ class Rs(object):
 
     @property
     def rs_id(self):
-        return "rs" + self._n.get("rsId")
+        return "rs" + self._n.get("uid")
 
     @property
     def withdrawn(self):
-        return "notwithdrawn" not in self._n.get("snpType")
+        return "notwithdrawn" not in self._n.find("SNP_CLASS")
 
+    # seems to have been deprecated
     @property
     def orient(self):
         return self._n.get("orient")
@@ -54,7 +56,7 @@ class Rs(object):
 
     @property
     def hgvs_tags(self):
-        return self._n.xpath("docsum:hgvs/text()", namespaces={"docsum": self._n.nsmap[None]})
+        return self._n.find("DOCSUM", namespaces={None: self._n.nsmap.get(None)}).text
 
     @property
     def hgvs_genome_tags(self):
